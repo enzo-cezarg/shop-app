@@ -1,16 +1,19 @@
-# shop
+# 🛒 MarketplaceApp
 
-A new Flutter project.
+> Este é um projeto de **aplicativo de marketplace** desenvolvido com **Flutter**, criado com o objetivo de **estudar e praticar técnicas de gerenciamento de estado**, utilizando o **Provider** como abordagem principal.
 
-## Getting Started
+![Flutter](https://img.shields.io/badge/Flutter-3.6.0-blue?logo=flutter)
+![Versão](https://img.shields.io/badge/Vers%C3%A3o-0.1.0-green)
+![Plataformas](https://img.shields.io/badge/Plataformas-Android-orange)
 
-This project is a starting point for a Flutter application.
+## 🎯 Objetivo
 
-A few resources to get you started if this is your first Flutter project:
+Explorar e entender o gerenciamento de estado com **Provider** no Flutter, aplicando os conceitos em uma aplicação realista de marketplace.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🛠️ Tecnologias e Ferramentas
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter
+- Dart
+- Provider (gerenciamento de estado)
+- Widgets personalizados
+- Design responsivo
