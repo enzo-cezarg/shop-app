@@ -1,4 +1,4 @@
-# 🛒 MarketplaceApp
+# 🛒 ShopApp
 
 > Este é um projeto de **aplicativo de marketplace** desenvolvido com **Flutter**, criado com o objetivo de **estudar e praticar técnicas de gerenciamento de estado**, utilizando o **Provider** como abordagem principal.
 
