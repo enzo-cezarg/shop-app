@@ -12,11 +12,9 @@ class ProductsOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'My Shop',
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        ),
+        title: Text('My Shop'),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: GridView.builder(
         padding: EdgeInsets.all(10),
