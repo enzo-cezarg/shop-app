@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// This class was constructed for educational purposes
 class CounterState {
   int _value = 0;
 

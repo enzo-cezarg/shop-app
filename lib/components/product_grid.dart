@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 
 class ProductGrid extends StatelessWidget {
   const ProductGrid({super.key});
+
   @override
   Widget build(BuildContext context) {
-
     final provider = Provider.of<ProductList>(context);
     final List<Product> loadedProducts = provider.items;
 
@@ -19,7 +19,10 @@ class ProductGrid extends StatelessWidget {
           childAspectRatio: 3 / 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10),
-      itemBuilder: (ctx, i) => ProductItem(product: loadedProducts[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+        value: loadedProducts[i],
+        child: ProductItem(),
+      ),
       itemCount: loadedProducts.length,
     );
   }
