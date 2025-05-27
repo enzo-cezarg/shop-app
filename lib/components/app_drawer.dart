@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             iconColor: Color.fromARGB(255, 111, 119, 127),
             textColor: Color.fromARGB(255, 111, 119, 127),
-            leading: Icon(Icons.shop),
+            leading: Icon(Icons.shopping_bag_outlined),
             title: Text('Shop'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(AppRoutes.home);
@@ -30,7 +30,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             iconColor: Color.fromARGB(255, 111, 119, 127),
             textColor: Color.fromARGB(255, 111, 119, 127),
-            leading: Icon(Icons.payment),
+            leading: Icon(Icons.receipt_long_outlined),
             title: Text('Orders'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(AppRoutes.orders);
