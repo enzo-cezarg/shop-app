@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:shop/models/product.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/models/product_list.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -39,6 +38,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
+  bool isValidImageUrl(String url) {
+    bool isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
+
+    bool endsWithFile = url.toLowerCase().endsWith('.png') ||
+        url.toLowerCase().endsWith('.jpg') ||
+        url.toLowerCase().endsWith('.jpeg');
+
+    return isValidUrl && endsWithFile;
+  }
+
   void _submitForm() {
     final isValid = _formKey.currentState?.validate() ?? false;
 
@@ -48,17 +57,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     _formKey.currentState?.save();
 
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      name: _formData['name'] as String,
-      description: _formData['description'] as String,
-      price: _formData['price'] as double,
-      imageUrl: _formData['imageUrl'] as String
-    );
+    Provider.of<ProductList>(context, listen: false)
+        .addProductFromData(_formData);
+    Navigator.of(context).pop();
 
-    print(newProduct.id);
-    print(newProduct.name);
-    print(newProduct.price);
   }
 
   @override
@@ -66,14 +68,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('New Product'),
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .primary,
-        foregroundColor: Theme
-            .of(context)
-            .colorScheme
-            .onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         actions: [IconButton(onPressed: _submitForm, icon: Icon(Icons.save))],
       ),
       body: Padding(
@@ -90,11 +86,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   final name = inputName ?? '';
 
                   if (name.trim().isEmpty) {
-                    return 'Este campo é obrigatório.';
+                    return 'This field is required.';
                   }
 
                   if (name.trim().length < 3) {
-                    return 'Este campo precisa de no mínimo 3 letras.';
+                    return 'Name must be at least 3 characters long.';
                   }
 
                   return null;
@@ -108,7 +104,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 focusNode: _priceFocus,
                 onSaved: (price) =>
-                _formData['price'] = double.parse(price ?? '0'),
+                    _formData['price'] = double.parse(price ?? '0'),
+                validator: (inputPrice) {
+                  final priceString = inputPrice ?? '';
+                  final price = double.tryParse(priceString) ?? -1;
+
+                  if (price <= 0) {
+                    return 'Invalid price.';
+                  }
+
+                  return null;
+                },
                 onFieldSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(_descriptionFocus),
               ),
@@ -119,7 +125,20 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 maxLines: 3,
                 focusNode: _descriptionFocus,
                 onSaved: (description) =>
-                _formData['description'] = description ?? '',
+                    _formData['description'] = description ?? '',
+                validator: (inputDescription) {
+                  final description = inputDescription ?? '';
+
+                  if (description.trim().isEmpty) {
+                    return 'This field is required.';
+                  }
+
+                  if (description.trim().length < 10) {
+                    return 'Description must be at least 10 characters long.';
+                  }
+
+                  return null;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -132,7 +151,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       textInputAction: TextInputAction.done,
                       controller: _imageUrlController,
                       onSaved: (imageUrl) =>
-                      _formData['imageUrl'] = imageUrl ?? '',
+                          _formData['imageUrl'] = imageUrl ?? '',
+                      validator: (inputImageUrl) {
+                        final imageUrl = inputImageUrl ?? '';
+
+                        if (!isValidImageUrl(imageUrl)) {
+                          return 'Please enter a valid URL.';
+                        }
+
+                        return null;
+                      },
                       onFieldSubmitted: (_) => _submitForm(),
                     ),
                   ),
@@ -147,9 +175,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     child: _imageUrlController.text.isEmpty
                         ? Text('Informe a URL')
                         : FittedBox(
-                      fit: BoxFit.cover,
-                      child: Image.network(_imageUrlController.text),
-                    ),
+                            fit: BoxFit.cover,
+                            child: Image.network(_imageUrlController.text),
+                          ),
                   ),
                 ],
               ),
