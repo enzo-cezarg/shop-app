@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/models/product.dart';
 import 'package:shop/models/product_list.dart';
 
 class ProductFormPage extends StatefulWidget {
@@ -23,6 +24,26 @@ class _ProductFormPageState extends State<ProductFormPage> {
   void initState() {
     super.initState();
     _imageUrlFocus.addListener(updateImage);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      if (arg != null) {
+        final product = arg as Product;
+        _formData['id'] = product.id;
+        _formData['name'] = product.name;
+        _formData['price'] = product.price;
+        _formData['description'] = product.description;
+        _formData['imageUrl'] = product.imageUrl;
+
+        _imageUrlController.text = product.imageUrl;
+      }
+    }
   }
 
   @override
@@ -58,7 +79,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     _formKey.currentState?.save();
 
     Provider.of<ProductList>(context, listen: false)
-        .addProductFromData(_formData);
+        .saveProduct(_formData);
     Navigator.of(context).pop();
 
   }
@@ -79,6 +100,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _formData['name']?.toString(),
                 decoration: InputDecoration(labelText: 'Name'),
                 textInputAction: TextInputAction.next,
                 onSaved: (name) => _formData['name'] = name ?? '',
@@ -99,6 +121,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     FocusScope.of(context).requestFocus(_priceFocus),
               ),
               TextFormField(
+                initialValue: _formData['price']?.toString(),
                 decoration: InputDecoration(labelText: 'Price'),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -119,6 +142,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     FocusScope.of(context).requestFocus(_descriptionFocus),
               ),
               TextFormField(
+                initialValue: _formData['description']?.toString(),
                 decoration: InputDecoration(labelText: 'Description'),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.multiline,
