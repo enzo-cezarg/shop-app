@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shopping_bag_outlined),
             title: Text('Shop'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+              Navigator.of(context).pushReplacementNamed(AppRoutes.authOrHome);
             },
           ),
           Divider(color: Color.fromARGB(255, 222, 226, 230),),
