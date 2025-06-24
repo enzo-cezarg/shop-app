@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/exceptions/http_exception.dart';
+import 'package:shop/models/auth.dart';
 import 'package:shop/models/cart.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -12,6 +13,7 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
     final msg = ScaffoldMessenger.of(context);
 
     return ClipRRect(
@@ -22,7 +24,10 @@ class ProductGridItem extends StatelessWidget {
             builder: (ctx, product, _) => IconButton(
               onPressed: () async {
                 try {
-                  await product.toggleFavorite();
+                  await product.toggleFavorite(
+                    auth.token ?? '',
+                    auth.userId ?? '',
+                  );
                 } on HttpException catch (error) {
                   msg.hideCurrentSnackBar();
                   msg.showSnackBar(
@@ -47,10 +52,10 @@ class ProductGridItem extends StatelessWidget {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Produto adicionado com sucesso!'),
+                  content: Text('Product added!'),
                   duration: Duration(seconds: 2),
                   action: SnackBarAction(
-                      label: 'DESFAZER',
+                      label: 'UNDO',
                       textColor: Theme.of(context).colorScheme.secondary,
                       onPressed: () {
                         cart.removeSingleItem(product.id);

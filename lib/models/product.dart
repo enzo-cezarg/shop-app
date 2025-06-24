@@ -13,7 +13,7 @@ class Product with ChangeNotifier {
   final String imageUrl;
   bool isFavorite;
 
-  final _baseUrl = Constants.productsUrl;
+  final _baseUrl = Constants.userFavoritesUrl;
 
   Product({
     required this.id,
@@ -24,15 +24,13 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String token, String userId) async {
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final response = await http.patch(
-      Uri.parse('$_baseUrl/$id.json'),
-      body: jsonEncode({
-        'isFavorite': isFavorite,
-      }),
+    final response = await http.put(
+      Uri.parse('$_baseUrl/$userId/$id.json?auth=$token'),
+      body: jsonEncode(isFavorite),
     );
 
     if (response.statusCode >= 400) {
