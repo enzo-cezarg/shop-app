@@ -14,7 +14,8 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
@@ -25,9 +26,31 @@ class _AuthFormState extends State<AuthForm> {
     'password': '',
   };
 
+  AnimationController? _controller;
+
   bool _isLogin() => _authMode == AuthMode.login;
 
   bool _isSignup() => _authMode == AuthMode.signUp;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+
+    if (_isSignup()) {
+      _controller?.value = 1.0;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller?.dispose();
+    _passwordController.dispose();
+  }
 
   void _showErrorDialog(String msg) {
     showDialog(
@@ -71,13 +94,18 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   void _switchAuthMode() {
-    setState(() {
-      if (_isLogin()) {
+    if (_isLogin()) {
+      setState(() {
         _authMode = AuthMode.signUp;
-      } else {
-        _authMode = AuthMode.login;
-      }
-    });
+      });
+      _controller?.forward();
+    } else {
+      _controller?.reverse().then((_) {
+        setState(() {
+          _authMode = AuthMode.login;
+        });
+      });
+    }
   }
 
   @override
@@ -86,10 +114,16 @@ class _AuthFormState extends State<AuthForm> {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        height: _isLogin() ? 310 : 400,
-        width: deviceSize.width * 0.85,
+      child: AnimatedBuilder(
+        animation: _controller!,
+        builder: (ctx, child) => Container(
+          height: _isLogin()
+              ? 310
+              : 310 + (_controller!.value * 90), // 90 de espaço para "confirm password"
+          width: deviceSize.width * 0.85,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: child,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -126,21 +160,23 @@ class _AuthFormState extends State<AuthForm> {
                 },
                 onSaved: (password) => _authData['password'] = password ?? '',
               ),
-              if (_isSignup())
-                TextFormField(
+              SizeTransition(
+                sizeFactor: _controller!,
+                axisAlignment: -1.0,
+                child: TextFormField(
                   decoration: InputDecoration(labelText: 'Confirm Password'),
-                  keyboardType: TextInputType.emailAddress,
                   obscureText: true,
                   validator: _isLogin()
                       ? null
                       : (inputPassword) {
-                          final password = inputPassword ?? '';
-                          if (password != _passwordController.text) {
-                            return 'Passwords do not match.';
-                          }
-                          return null;
-                        },
+                    final password = inputPassword ?? '';
+                    if (password != _passwordController.text) {
+                      return 'Passwords do not match.';
+                    }
+                    return null;
+                  },
                 ),
+              ),
               SizedBox(height: 20),
               if (_isLoading)
                 CircularProgressIndicator(

@@ -22,29 +22,32 @@ class AuthPage extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Shop',
-                    style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'Sarina',
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      shadows: [Shadow(color: Colors.black38, blurRadius: 10)],
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    //Container(
+                    //  //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                    //  margin: EdgeInsets.only(bottom: 20),
+                    //  child: ClipRRect(borderRadius: BorderRadius.circular(50), child: Image.asset('assets/images/shop-logo.png', width: 100,))
+                    //),
+                    Text(
+                      'Shop',
+                      style: TextStyle(
+                        fontSize: 60,
+                        fontFamily: 'Sarina',
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        shadows: [Shadow(color: Colors.black38, blurRadius: 10)],
+                      ),
                     ),
-                  ),
+                    AuthForm()
+                  ],
                 ),
-                AuthForm()
-              ],
+              ),
             ),
           )
         ],
