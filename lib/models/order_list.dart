@@ -41,18 +41,19 @@ class OrderList with ChangeNotifier {
     data.forEach((orderId, orderData) {
       items.add(
         Order(
-            id: orderId,
-            date: DateTime.parse(orderData['date']),
-            total: orderData['total'],
-            products: (orderData['products'] as List<dynamic>).map((item) {
-              return CartItem(
-                id: item['id'],
-                productId: item['productId'],
-                name: item['name'],
-                quantity: item['quantity'],
-                price: item['price'],
-              );
-            }).toList()),
+          id: orderId,
+          date: DateTime.parse(orderData['date']),
+          total: orderData['total'],
+          products: (orderData['products'] as List<dynamic>).map((item) {
+            return CartItem(
+              id: item['id'],
+              productId: item['productId'],
+              name: item['name'],
+              quantity: item['quantity'],
+              price: item['price'],
+            );
+          }).toList(),
+        ),
       );
     });
 
