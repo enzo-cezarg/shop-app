@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/exceptions/auth_exception.dart';
@@ -14,8 +12,7 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm>
-    with SingleTickerProviderStateMixin {
+class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
@@ -117,9 +114,7 @@ class _AuthFormState extends State<AuthForm>
       child: AnimatedBuilder(
         animation: _controller!,
         builder: (ctx, child) => Container(
-          height: _isLogin()
-              ? 310
-              : 310 + (_controller!.value * 90), // 90 de espaço para "confirm password"
+          height: _isLogin() ? 310 : 310 + (_controller!.value * 90), // 90 de espaço para "confirm password"
           width: deviceSize.width * 0.85,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: child,
@@ -169,12 +164,12 @@ class _AuthFormState extends State<AuthForm>
                   validator: _isLogin()
                       ? null
                       : (inputPassword) {
-                    final password = inputPassword ?? '';
-                    if (password != _passwordController.text) {
-                      return 'Passwords do not match.';
-                    }
-                    return null;
-                  },
+                          final password = inputPassword ?? '';
+                          if (password != _passwordController.text) {
+                            return 'Passwords do not match.';
+                          }
+                          return null;
+                        },
                 ),
               ),
               SizedBox(height: 20),
@@ -207,9 +202,7 @@ class _AuthFormState extends State<AuthForm>
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(_isLogin()
-                    ? 'New here? Create an account.'
-                    : 'Already have an account? Log in.'),
+                child: Text(_isLogin() ? 'New here? Create an account.' : 'Already have an account? Log in.'),
               )
             ],
           ),

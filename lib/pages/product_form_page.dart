@@ -195,7 +195,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         Expanded(
                           child: TextFormField(
                             decoration:
-                                InputDecoration(labelText: 'URL da Imagem'),
+                                InputDecoration(labelText: 'Image URL'),
                             focusNode: _imageUrlFocus,
                             keyboardType: TextInputType.url,
                             textInputAction: TextInputAction.done,
@@ -223,7 +223,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           ),
                           alignment: Alignment.center,
                           child: _imageUrlController.text.isEmpty
-                              ? Text('Informe a URL')
+                              ? Text('Insert URL')
                               : FittedBox(
                                   fit: BoxFit.cover,
                                   child:
